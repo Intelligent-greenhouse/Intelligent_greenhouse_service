@@ -1,0 +1,18 @@
+[trigger.http]
+addr = "0.0.0.0:8000"
+timeout = "1s"
+
+[trigger.grpc]
+addr = "0.0.0.0:9000"
+timeout = "1s"
+
+[source.database]
+host = "localhost"
+port = 5432
+user = "root"
+password = "password"
+dbname = "postgres"
+option = ["TimeZone=Asia/Shanghai", "sslmode=disable"]
+max_idle_conn = 50
+max_open_conn = 100
+conn_max_lifetime = "30s"

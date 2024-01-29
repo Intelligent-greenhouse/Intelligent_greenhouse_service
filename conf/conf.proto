@@ -1,0 +1,36 @@
+syntax = "proto3";
+package intelligent_greenhouse_service.conf;
+
+option go_package = "intelligent-greenhouse-service/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Bootstrap {
+  Trigger trigger = 1;
+  Source source = 2;
+}
+
+message Trigger {
+  message HTTP {
+    string network = 1;
+    string addr = 2;
+    google.protobuf.Duration timeout = 3;
+  }
+  HTTP http = 1;
+}
+
+message Source {
+  Database database = 1;
+}
+
+message Database {
+  string host = 1;
+  int32 port = 2;
+  string user = 3;
+  string password = 4;
+  string dbname = 5;
+  repeated string option = 6;
+  uint32 max_idle_conn = 7;
+  uint32 max_open_conn = 8;
+  google.protobuf.Duration conn_max_lifetime = 9;
+}
