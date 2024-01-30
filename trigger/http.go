@@ -1,6 +1,7 @@
 package trigger
 
 import (
+	user "intelligent-greenhouse-service/api/web/user"
 	"intelligent-greenhouse-service/conf"
 	"intelligent-greenhouse-service/service"
 
@@ -26,6 +27,6 @@ func NewHTTPServer(config *conf.Trigger, srv *service.AuthService, logger log.Lo
 		opts = append(opts, http.Timeout(config.Http.Timeout.AsDuration()))
 	}
 	server := http.NewServer(opts...)
-	//v1.RegisterAuthServiceHTTPServer(server, srv)
+	user.RegisterUserHTTPServer(server, srv)
 	return server
 }
