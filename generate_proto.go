@@ -24,9 +24,9 @@ func ensureDir(dirName string) error {
 func findProto(directory, t string) []string {
 	var protoFiles []string
 	filepath.Walk(directory, func(path string, info os.FileInfo, err error) error {
-		if strings.Contains(path, fmt.Sprintf("/%s/", t)) && strings.HasSuffix(path, ".proto") {
+		if strings.Contains(path, fmt.Sprintf("\\%s\\", t)) && strings.HasSuffix(path, ".proto") {
 			relativePath, _ := filepath.Rel(directory, path)
-			protoFiles = append(protoFiles, filepath.Join(directory, relativePath))
+			protoFiles = append(protoFiles, strings.ReplaceAll(filepath.Join(directory, relativePath), "\\", "/"))
 		}
 		return nil
 	})
@@ -39,7 +39,7 @@ func generateProtoWEB(protoFiles []string) {
 	}
 	args := []string{
 		"--proto_path=./proto/api",
-		"--proto_path=./proto/extension",
+		"--proto_path=./proto/third_party",
 		"--go_out=paths=source_relative:./api",
 		"--go-http_out=paths=source_relative:./api",
 		"--go-grpc_out=paths=source_relative:./api",
@@ -66,7 +66,7 @@ func generateProtoMQ(protoFiles []string) {
 	}
 	args := []string{
 		"--proto_path=./proto/api",
-		"--proto_path=./proto/extension",
+		"--proto_path=./proto/third_party",
 		"--go_out=paths=source_relative:./api",
 	}
 	args = append(args, protoFiles...)

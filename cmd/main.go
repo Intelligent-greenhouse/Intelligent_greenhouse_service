@@ -16,12 +16,8 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-// go build -ldflags "-X main.Version=x.y.z"
 var (
-	// Name is the name of the compiled software.
-	Name = "cypunsource-auth"
-	// Version is the version of the compiled software.
-	Version string
+	Name = "intelligent-greenhouse-service"
 
 	id, _ = os.Hostname()
 )
@@ -37,7 +33,6 @@ func main() {
 	logger := log.With(log.NewStdLogger(os.Stdout),
 		"ts", log.DefaultTimestamp,
 		"service.name", Name,
-		"service.version", Version,
 
 		"caller", log.DefaultCaller,
 	)

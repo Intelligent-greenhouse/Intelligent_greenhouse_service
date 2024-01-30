@@ -29,7 +29,6 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 	appInstance := kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
-		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(logger),
 		kratos.Server(
