@@ -2,9 +2,10 @@
 addr = "0.0.0.0:8000"
 timeout = "1s"
 
-[trigger.grpc]
-addr = "0.0.0.0:9000"
-timeout = "1s"
+[trigger.mqtt]
+host = "localhost"
+port = 1883
+client_id = "service"
 
 [source.database]
 host = "localhost"

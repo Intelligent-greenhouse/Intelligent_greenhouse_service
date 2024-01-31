@@ -1,20 +1,19 @@
 package trigger
 
 import (
-	user "intelligent-greenhouse-service/api/web/user"
-	"intelligent-greenhouse-service/conf"
-	"intelligent-greenhouse-service/service"
-
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"intelligent-greenhouse-service/conf"
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(config *conf.Trigger, srv *service.AuthService, logger log.Logger) *http.Server {
+func NewHTTPServer(config *conf.Trigger, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			logging.Server(logger),
 		),
 	}
 	if config.Http.Network != "" {
@@ -27,6 +26,5 @@ func NewHTTPServer(config *conf.Trigger, srv *service.AuthService, logger log.Lo
 		opts = append(opts, http.Timeout(config.Http.Timeout.AsDuration()))
 	}
 	server := http.NewServer(opts...)
-	user.RegisterUserHTTPServer(server, srv)
 	return server
 }

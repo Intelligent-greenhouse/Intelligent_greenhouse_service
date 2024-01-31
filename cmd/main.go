@@ -32,9 +32,6 @@ func main() {
 
 	logger := log.With(log.NewStdLogger(os.Stdout),
 		"ts", log.DefaultTimestamp,
-		"service.name", Name,
-
-		"caller", log.DefaultCaller,
 	)
 	logger = log.With(logger, "level", LogLevel)
 

@@ -10,7 +10,10 @@ require (
 )
 
 require (
+	github.com/eclipse/paho.mqtt.golang v1.4.3 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240102182953-50ed04b92917 // indirect
 	google.golang.org/grpc v1.60.1 // indirect
 )

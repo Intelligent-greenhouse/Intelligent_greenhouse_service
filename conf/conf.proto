@@ -16,7 +16,14 @@ message Trigger {
     string addr = 2;
     google.protobuf.Duration timeout = 3;
   }
+
+  message Mqtt {
+    string host = 1;
+    int32 port = 2;
+    string client_id = 3;
+  }
   HTTP http = 1;
+  Mqtt mqtt = 2;
 }
 
 message Source {
