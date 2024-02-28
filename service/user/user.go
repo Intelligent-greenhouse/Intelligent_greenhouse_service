@@ -16,6 +16,11 @@ func NewUserService(uc *domain_user.UserDomain) *UserService {
 }
 
 func (s *UserService) Login(ctx context.Context, req *user.LoginRequest) (rsp *user.LoginReply, err error) {
-	//TODO implement me
-	return &user.LoginReply{User: &user.UserInfo{Username: req.Password}}, nil
+	id, err := s.uc.Login(ctx, req.Username, req.Password)
+	if err != nil {
+		return nil, err
+	}
+	return &user.LoginReply{
+		UserId: id,
+	}, nil
 }
