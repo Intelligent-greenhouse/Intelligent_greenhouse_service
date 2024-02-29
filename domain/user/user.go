@@ -7,7 +7,7 @@ import (
 
 // UserRepo .
 type UserRepo interface {
-	Login(ctx context.Context, userName, passWord string) (int32, error)
+	Login(ctx context.Context, userName, passWord string) (id int32, err error)
 	// ...
 }
 
@@ -19,10 +19,22 @@ type UserDomain struct {
 
 // NewUserDomain .
 func NewUserDomain(repo UserRepo, logger log.Logger) *UserDomain {
-	return &UserDomain{repo: repo, log: log.NewHelper(logger)}
+	return &UserDomain{
+		repo: repo,
+		log:  log.NewHelper(logger),
+	}
 }
 
-func (uc *UserDomain) Login(ctx context.Context, userName, passWord string) (int32, error) {
+func (uc *UserDomain) UserLogin(ctx context.Context, userName, passWord string) (int32, error) {
 	id, err := uc.repo.Login(ctx, userName, passWord)
-	return id, err
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
+}
+
+func (uc UserDomain) UserAuthTest(ctx context.Context) (string, error) {
+
+	return "", nil
 }

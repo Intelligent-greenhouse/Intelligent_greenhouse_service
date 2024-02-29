@@ -8,6 +8,7 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Trigger trigger = 1;
   Source source = 2;
+  JWT jwt = 3;
 }
 
 message Trigger {
@@ -40,4 +41,9 @@ message Database {
   uint32 max_idle_conn = 7;
   uint32 max_open_conn = 8;
   google.protobuf.Duration conn_max_lifetime = 9;
+}
+
+message JWT{
+  string verify_key = 1;
+  google.protobuf.Duration login_expire_time = 2;
 }

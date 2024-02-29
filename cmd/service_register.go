@@ -12,9 +12,10 @@ import (
 
 func UserRegister() RegisterDomainHandler {
 	return func(ctx context.Context, s *http.Server) {
+		conf := Config(ctx)
 		data := Data(ctx)
 		logger := Logger(ctx)
-		repo := dao.NewUserDao(data, logger)
+		repo := dao.NewUserDao(data, conf, logger)
 		usecase := domain.NewUserDomain(repo, logger)
 		srv := service.NewUserService(usecase)
 		api.RegisterUserHTTPServer(s, srv)

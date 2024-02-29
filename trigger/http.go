@@ -14,6 +14,7 @@ func NewHTTPServer(config *conf.Trigger, logger log.Logger) *http.Server {
 		http.Middleware(
 			recovery.Recovery(),
 			logging.Server(logger),
+			//selector.Server(jwt.LoginAuthMiddleware([]byte()))
 		),
 	}
 	if config.Http.Network != "" {

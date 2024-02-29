@@ -17,3 +17,7 @@ option = ["TimeZone=Asia/Shanghai", "sslmode=disable"]
 max_idle_conn = 50
 max_open_conn = 100
 conn_max_lifetime = "30s"
+
+[jwt]
+verify_key = "12345"
+login_expire_time = 360000
