@@ -16,7 +16,11 @@ func NewHTTPServer(config *conf.Trigger, jwtConfig *conf.JWT, logger log.Logger)
 		http.Middleware(
 			recovery.Recovery(),
 			logging.Server(logger),
-			selector.Server(jwt.LoginAuthMiddleware([]byte(jwtConfig.VerifyKey))).Path("/api.web.user.User/UserAuth").Build(),
+			selector.Server(jwt.LoginAuthMiddleware([]byte(jwtConfig.VerifyKey))).Path(
+				"/api.web.user.User/UserAuth",
+				"/web.web.user.User/GetUserGreenHorseList",
+				"/web.web.user.User/BindDevice",
+			).Build(),
 		),
 	}
 	if config.Http.Network != "" {

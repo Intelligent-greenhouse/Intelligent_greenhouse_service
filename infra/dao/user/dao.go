@@ -44,11 +44,20 @@ func (r *userDao) Login(ctx context.Context, userName, passWord string) (id int3
 	return userInfo.ID, nil
 }
 
+var instance *userDao
+
 // NewUserDao .
 func NewUserDao(data *infra.Data, c *conf.Bootstrap, logger log.Logger) user.UserRepo {
-	return &userDao{
-		data: data,
-		log:  log.NewHelper(logger),
-		conf: c,
+	if instance == nil {
+		instance = &userDao{
+			data: data,
+			log:  log.NewHelper(logger),
+			conf: c,
+		}
 	}
+	return instance
+}
+
+func GetUserDaoInstance() user.UserRepo {
+	return instance
 }

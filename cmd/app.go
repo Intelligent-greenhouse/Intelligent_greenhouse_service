@@ -1,30 +1,18 @@
 package main
 
 import (
-	"context"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/transport/http"
+	api "intelligent-greenhouse-service/api/web/user"
 	"intelligent-greenhouse-service/conf"
+	domain "intelligent-greenhouse-service/domain/user"
 	"intelligent-greenhouse-service/infra"
+	"intelligent-greenhouse-service/infra/dao/device"
+	"intelligent-greenhouse-service/infra/dao/user"
+	userDao "intelligent-greenhouse-service/infra/dao/user"
+	service "intelligent-greenhouse-service/service/user"
 	"intelligent-greenhouse-service/trigger"
 )
-
-func Register(
-	http *http.Server,
-	config *conf.Bootstrap,
-	data *infra.Data,
-	logger log.Logger,
-	handles ...RegisterDomainHandler,
-) {
-	ctx := context.Background()
-	ctx = context.WithValue(ctx, ConfigKey{}, config)
-	ctx = context.WithValue(ctx, DataKey{}, data)
-	ctx = context.WithValue(ctx, LoggerKey{}, logger)
-	for _, f := range handles {
-		f(ctx, http)
-	}
-}
 
 func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), error) {
 	data, dataCleanup, err := infra.NewData(config.GetSource(), logger)
@@ -32,19 +20,18 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 		return nil, nil, err
 	}
 
+	userDao.NewUserDao(data, config, logger)
+	device.NewDeviceDao(data, config, logger)
+
 	httpServer := trigger.NewHTTPServer(config.GetTrigger(), config.Jwt, logger)
 	cleanup := func() {
 		dataCleanup()
 		// 其他的关闭动作
 	}
 
-	Register(
-		httpServer,
-		config,
-		data,
-		logger,
-		UserRegister(),
-	)
+	usecase := domain.NewUserDomain(user.GetUserDaoInstance(), device.GetDeviceDaoInstance(), logger)
+	srv := service.NewUserService(usecase)
+	api.RegisterUserHTTPServer(httpServer, srv)
 
 	appInstance := kratos.New(
 		kratos.ID(id),
@@ -57,38 +44,4 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 	)
 
 	return appInstance, cleanup, nil
-}
-
-type RegisterDomainHandler func(ctx context.Context, s *http.Server)
-
-type RegisterDomain func() RegisterDomainHandler
-
-type LoggerKey struct{}
-
-func Logger(ctx context.Context) log.Logger {
-	v, ok := ctx.Value(LoggerKey{}).(log.Logger)
-	if !ok {
-		panic("")
-	}
-	return v
-}
-
-type ConfigKey struct{}
-
-func Config(ctx context.Context) *conf.Bootstrap {
-	v, ok := ctx.Value(ConfigKey{}).(*conf.Bootstrap)
-	if !ok {
-		panic("")
-	}
-	return v
-}
-
-type DataKey struct{}
-
-func Data(ctx context.Context) *infra.Data {
-	v, ok := ctx.Value(DataKey{}).(*infra.Data)
-	if !ok {
-		panic("")
-	}
-	return v
 }
