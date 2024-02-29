@@ -26,7 +26,6 @@ type LoginToken struct {
 // FromLoginTokenContext 返回存储在context中的登录token，如果有
 func FromLoginTokenContext(ctx context.Context) (loginToken *LoginToken, ok bool) {
 	loginToken, ok = ctx.Value(loginTokenKey{}).(*LoginToken)
-	fmt.Println(ctx)
 	return
 }
 
