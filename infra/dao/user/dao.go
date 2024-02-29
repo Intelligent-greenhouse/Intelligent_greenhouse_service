@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/transport"
 	"intelligent-greenhouse-service/conf"
 	"intelligent-greenhouse-service/domain/user"
 	"intelligent-greenhouse-service/infra"
@@ -34,7 +35,11 @@ func (r *userDao) Login(ctx context.Context, userName, passWord string) (id int3
 	if err != nil {
 		return 0, err
 	}
-	jwt.TokenInject(ctx, token)
+
+	// 将token放入cookie中
+	tr, _ := transport.FromServerContext(ctx)
+
+	tr.ReplyHeader().Set("Authorization", token)
 
 	return userInfo.ID, nil
 }

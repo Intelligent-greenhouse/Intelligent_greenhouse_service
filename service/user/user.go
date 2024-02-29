@@ -27,10 +27,7 @@ func (s *UserService) Login(ctx context.Context, req *user.LoginRequest) (rsp *u
 }
 
 func (s *UserService) UserAuth(ctx context.Context, req *emptypb.Empty) (rsp *user.LoginReply, err error) {
-	//token, ok := jwt.FromLoginTokenContext(ctx)
-	//if !ok {
-	//    return nil, errors.New(403, "", "TokenNotFound")
-	//}
+	test, err := s.uc.UserAuthTest(ctx)
 
-	return &user.LoginReply{UserId: 1}, nil
+	return &user.LoginReply{UserId: test}, nil
 }

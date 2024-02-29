@@ -32,7 +32,7 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 		return nil, nil, err
 	}
 
-	httpServer := trigger.NewHTTPServer(config.GetTrigger(), logger)
+	httpServer := trigger.NewHTTPServer(config.GetTrigger(), config.Jwt, logger)
 	cleanup := func() {
 		dataCleanup()
 		// 其他的关闭动作

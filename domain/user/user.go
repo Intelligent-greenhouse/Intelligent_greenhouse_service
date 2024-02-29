@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	jwt "intelligent-greenhouse-service/middleware"
 )
 
 // UserRepo .
@@ -34,7 +35,7 @@ func (uc *UserDomain) UserLogin(ctx context.Context, userName, passWord string) 
 	return id, nil
 }
 
-func (uc UserDomain) UserAuthTest(ctx context.Context) (string, error) {
-
-	return "", nil
+func (uc UserDomain) UserAuthTest(ctx context.Context) (int32, error) {
+	token, _ := jwt.FromLoginTokenContext(ctx)
+	return token.UserID, nil
 }
