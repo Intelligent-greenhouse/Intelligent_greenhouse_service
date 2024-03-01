@@ -48,9 +48,20 @@ func (s *UserService) GetUserGreenHorseList(ctx context.Context, req *user.UserI
 	panic("implement me")
 }
 
-func (s *UserService) RegisterDevice(ctx context.Context, req *user.DeviceCode) (rsp *emptypb.Empty, err error) {
+func (s *UserService) RegisterDevice(ctx context.Context, req *user.DeviceCode) (rsp *user.DeviceCode, err error) {
 	if !s.uc.IsAdmin(ctx) {
 		return nil, errors.New(403, "", "Forbidden")
 	}
+
+	device, err := s.uc.RegisterDevice(ctx, req.DeviceCode)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user.DeviceCode{DeviceCode: device.DeviceId}, nil
+}
+
+func (s *UserService) AddUserByAdmin(ctx context.Context, request *user.LoginRequest) (*user.UserId, error) {
+	//TODO implement me
 	panic("implement me")
 }

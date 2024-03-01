@@ -7,7 +7,7 @@ import (
 	"intelligent-greenhouse-service/conf"
 	domain "intelligent-greenhouse-service/domain/user"
 	"intelligent-greenhouse-service/infra"
-	"intelligent-greenhouse-service/infra/dao/device"
+	deviceDao "intelligent-greenhouse-service/infra/dao/device"
 	"intelligent-greenhouse-service/infra/dao/user"
 	userDao "intelligent-greenhouse-service/infra/dao/user"
 	service "intelligent-greenhouse-service/service/user"
@@ -21,7 +21,7 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 	}
 
 	userDao.NewUserDao(data, config, logger)
-	device.NewDeviceDao(data, config, logger)
+	deviceDao.NewDeviceDao(data, config, logger)
 
 	httpServer := trigger.NewHTTPServer(config.GetTrigger(), config.Jwt, logger)
 	cleanup := func() {
@@ -29,7 +29,7 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 		// 其他的关闭动作
 	}
 
-	usecase := domain.NewUserDomain(user.GetUserDaoInstance(), device.GetDeviceDaoInstance(), logger)
+	usecase := domain.NewUserDomain(user.GetUserDaoInstance(), deviceDao.GetDeviceDaoInstance(), logger)
 	srv := service.NewUserService(usecase)
 	api.RegisterUserHTTPServer(httpServer, srv)
 

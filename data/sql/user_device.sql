@@ -5,5 +5,5 @@ CREATE TABLE user_device
     device_id       VARCHAR(20)             NOT NULL            COMMENT '设置id',
     ctime           DATETIME                NULL                COMMENT '创建时间',
     mtime           DATETIME                NULL                COMMENT '修改时间',
-    del             BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
+    deleted         BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
 )

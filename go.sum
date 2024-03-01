@@ -1,6 +1,10 @@
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/cypunsource/cypunsource-tool v0.0.0-20240107162651-e3c274d826ce h1:ZZYPUK5R5UV+OaIbIvWQ9zhOcLVFFNozp0TVMY0swHE=
 github.com/cypunsource/cypunsource-tool v0.0.0-20240107162651-e3c274d826ce/go.mod h1:v//P5oBN8ibD1rgb/7O0HNRn4gJQO+cZRdejqSY2lzk=
+github.com/cypunsource/cypunsource-tool v0.0.0-20240126082006-135487d75236 h1:LB7sI1vNaAD5SAPPMij9UWSsRUTYqrlC25vW4TBhfC8=
+github.com/cypunsource/cypunsource-tool v0.0.0-20240126082006-135487d75236/go.mod h1:v//P5oBN8ibD1rgb/7O0HNRn4gJQO+cZRdejqSY2lzk=
+github.com/cypunsource/cypunsource-tool v0.0.0-20240301122035-21e5bcdc345f h1:qJRoyY5VRFHUS+ZvKvWkhZ2MFu+x+kTiH0PqZ4GwKEk=
+github.com/cypunsource/cypunsource-tool v0.0.0-20240301122035-21e5bcdc345f/go.mod h1:v//P5oBN8ibD1rgb/7O0HNRn4gJQO+cZRdejqSY2lzk=
 github.com/cypunsource/kratos-extension v0.0.0-20240106041841-b206537fd3ea h1:P3wdmDpykvS5MhNOcKCoyz+xpfRLC9kqLX+4FoDKxSU=
 github.com/cypunsource/kratos-extension v0.0.0-20240106041841-b206537fd3ea/go.mod h1:0EF+fvDRfOs7FuutpsdThkWIrZFCOb14W9VHHRztCDo=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

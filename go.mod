@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/cypunsource/cypunsource-tool v0.0.0-20240107162651-e3c274d826ce
+	github.com/cypunsource/cypunsource-tool v0.0.0-20240301122035-21e5bcdc345f
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 )

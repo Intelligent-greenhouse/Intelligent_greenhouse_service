@@ -20,6 +20,7 @@ func NewHTTPServer(config *conf.Trigger, jwtConfig *conf.JWT, logger log.Logger)
 				"/api.web.user.User/UserAuth",
 				"/web.web.user.User/GetUserGreenHorseList",
 				"/web.web.user.User/BindDevice",
+				"/api.web.user.User/RegisterDevice",
 			).Build(),
 		),
 	}

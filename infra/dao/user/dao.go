@@ -9,6 +9,7 @@ import (
 	"intelligent-greenhouse-service/domain/user"
 	"intelligent-greenhouse-service/infra"
 	jwt "intelligent-greenhouse-service/middleware"
+	"intelligent-greenhouse-service/model"
 )
 
 type userDao struct {
@@ -17,11 +18,22 @@ type userDao struct {
 	conf *conf.Bootstrap
 }
 
+func (r *userDao) GetUserInfoByUserId(ctx context.Context, userId int32) (*model.User, error) {
+	var u model.User
+	tx := r.data.Db.First(&u, userId)
+	err := tx.Error
+	if err != nil {
+		return nil, errors.New(404, "", "user not found")
+	}
+
+	return &u, nil
+}
+
 // Login 用户登录
 func (r *userDao) Login(ctx context.Context, userName, passWord string) (id int32, err error) {
 	// 获取数据库用户信息
-	var userInfo User
-	tx := r.data.Db.Where(&User{Username: userName, Password: passWord}).First(&userInfo)
+	var userInfo model.User
+	tx := r.data.Db.Where(&model.User{Username: userName, Password: passWord}).First(&userInfo)
 	err = tx.Error
 	if err != nil {
 		return 0, errors.New(404, "", "user not found")
