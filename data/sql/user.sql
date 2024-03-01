@@ -6,5 +6,5 @@ CREATE TABLE user
     is_admin        BOOLEAN                 NOT NULL            COMMENT '是否为管理员',
     ctime           DATETIME                NULL                COMMENT '创建时间',
     mtime           DATETIME                NULL                COMMENT '修改时间',
-    deleted         BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
+    del             BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
 )

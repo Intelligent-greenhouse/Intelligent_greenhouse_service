@@ -6,5 +6,5 @@ CREATE TABLE greenhouse
     des             TEXT                    NULL                COMMENT '备注',
     ctime           DATETIME                NULL                COMMENT '创建时间',
     mtime           DATETIME                NULL                COMMENT '修改时间',
-    deleted         BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
+    del             BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
 )
