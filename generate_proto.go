@@ -67,6 +67,7 @@ func generateProtoMQ(protoFiles []string) {
 		"--proto_path=./proto/api",
 		"--proto_path=./proto/third_party",
 		"--go_out=paths=source_relative:./api",
+		"--go-http_out=paths=source_relative:./api",
 	}
 	args = append(args, protoFiles...)
 	cmd := exec.Command("protoc", args...)
