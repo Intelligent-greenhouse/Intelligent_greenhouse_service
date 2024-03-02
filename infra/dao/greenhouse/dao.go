@@ -15,6 +15,20 @@ type GreenhouseDao struct {
 	conf *conf.Bootstrap
 }
 
+func (g GreenhouseDao) GetGreenhouseListByUserId(ctx context.Context, userId int32) ([]*model.Greenhouse, error) {
+	var greenList []*model.Greenhouse
+	err := g.data.Db.Table("user_greenhouse").
+		Select("greenhouse.*").
+		Joins("JOIN greenhouse ON user_greenhouse.greenhouse_id = greenhouse.id").
+		Where("user_greenhouse.user_id = ?", userId).
+		Find(&greenList).
+		Error
+	if err != nil {
+		return nil, err
+	}
+	return greenList, nil
+}
+
 func (g GreenhouseDao) BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId int32) error {
 	err := g.data.Db.Find(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
 	if err != nil {

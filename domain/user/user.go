@@ -14,6 +14,8 @@ import (
 type UserRepo interface {
 	Login(ctx context.Context, userName, passWord string) (id int32, err error)
 	GetUserInfoByUserId(ctx context.Context, userId int32) (*model.User, error)
+	GetUserInfoList(ctx context.Context, page, size int32) ([]*model.User, error)
+	CreateUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error)
 }
 
 // UserDomain .
@@ -62,6 +64,7 @@ func (uc UserDomain) RegisterDevice(ctx context.Context, deviceCode string) (*mo
 }
 
 func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, greenhouseId int32) error {
+
 	// 查找设备是否存在
 	deviceInfo, err := uc.deviceRepo.GetDeviceById(ctx, deviceId)
 	if err != nil {
@@ -79,4 +82,16 @@ func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, gree
 
 	// 绑定数据
 	return uc.greenhouseRepo.BandGreenhouseAndDevice(ctx, deviceId, greenhouseId)
+}
+
+func (uc UserDomain) GetUserList(ctx context.Context, page, size int32) ([]*model.User, error) {
+	return uc.userRepo.GetUserInfoList(ctx, page, size)
+}
+
+func (uc UserDomain) GetUserGreenHouseList(ctx context.Context, userId int32) ([]*model.Greenhouse, error) {
+	return uc.greenhouseRepo.GetGreenhouseListByUserId(ctx, userId)
+}
+
+func (uc UserDomain) CreateNewUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error) {
+	return uc.userRepo.CreateUser(ctx, name, psw, isAdmin)
 }

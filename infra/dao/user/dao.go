@@ -18,6 +18,34 @@ type userDao struct {
 	conf *conf.Bootstrap
 }
 
+func (r *userDao) CreateUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error) {
+	var userInfo *model.User
+	err := r.data.Db.Where(&model.User{Username: name}).First(&userInfo).Error
+	if err != nil {
+		return 0, err
+	}
+
+	if userInfo != nil {
+		return 0, errors.New(409, "", "username has exist")
+	}
+
+	newUser := &model.User{Username: name, Password: psw, IsAdmin: isAdmin}
+	if err = r.data.Db.Create(&newUser).Error; err != nil {
+		return 0, err
+	}
+
+	return newUser.ID, nil
+}
+
+func (r *userDao) GetUserInfoList(ctx context.Context, page, size int32) ([]*model.User, error) {
+	var userList []*model.User
+	if err := r.data.Db.Limit(int(size)).Offset(int((page - 1) * size)).Find(&userList).Error; err != nil {
+		return nil, err
+	}
+
+	return userList, nil
+}
+
 func (r *userDao) GetUserInfoByUserId(ctx context.Context, userId int32) (*model.User, error) {
 	var u model.User
 	tx := r.data.Db.First(&u, userId)

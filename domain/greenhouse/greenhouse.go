@@ -7,6 +7,7 @@ import (
 )
 
 type GreenhouseRepo interface {
+	GetGreenhouseListByUserId(ctx context.Context, userId int32) ([]*model.Greenhouse, error)
 	GetGreenhouseInfoById(ctx context.Context, id int32) (*model.Greenhouse, error)
 	GetGreenhouseBandInfo(ctx context.Context, deviceId, greenhouseId int32) error
 	BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId int32) error

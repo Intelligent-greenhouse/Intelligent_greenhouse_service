@@ -6,6 +6,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	user "intelligent-greenhouse-service/api/web/user"
 	domain_user "intelligent-greenhouse-service/domain/user"
+	jwt "intelligent-greenhouse-service/middleware"
 )
 
 type UserService struct {
@@ -42,14 +43,42 @@ func (s *UserService) BindDevice(ctx context.Context, req *user.BindDeviceInfo) 
 	return &emptypb.Empty{}, nil
 }
 
-func (s *UserService) GetAllUserList(ctx context.Context, req *emptypb.Empty) (rsp *user.UserList, err error) {
-	//TODO implement me
-	panic("implement me")
+func (s *UserService) GetAllUserList(ctx context.Context, req *user.Page) (rsp *user.UserList, err error) {
+	list, err := s.uc.GetUserList(ctx, req.Page, req.Size)
+	if err != nil {
+		return nil, err
+	}
+
+	var userList []*user.UserInfo
+	for _, u := range list {
+		userList = append(userList, &user.UserInfo{UserId: u.ID, UserName: u.Username})
+	}
+
+	return &user.UserList{List: userList}, nil
 }
 
 func (s *UserService) GetUserGreenHorseList(ctx context.Context, req *user.UserId) (rsp *user.GreenHouseList, err error) {
-	//TODO implement me
-	panic("implement me")
+	u, _ := jwt.FromLoginTokenContext(ctx)
+	if u.UserID != req.UserId && !u.IsAdmin {
+		return nil, errors.New(403, "", "Forbidden")
+	}
+
+	list, err := s.uc.GetUserGreenHouseList(ctx, req.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	var greenHouseList []*user.GreenHouse
+	for _, g := range list {
+		greenHouseList = append(greenHouseList, &user.GreenHouse{
+			Id:   g.ID,
+			Pos:  g.Pos,
+			Size: g.Size,
+			Des:  g.Des,
+		})
+	}
+
+	return &user.GreenHouseList{List: greenHouseList}, nil
 }
 
 func (s *UserService) RegisterDevice(ctx context.Context, req *user.DeviceCode) (rsp *user.DeviceCode, err error) {
@@ -65,7 +94,15 @@ func (s *UserService) RegisterDevice(ctx context.Context, req *user.DeviceCode) 
 	return &user.DeviceCode{DeviceCode: device.DeviceId}, nil
 }
 
-func (s *UserService) AddUserByAdmin(ctx context.Context, request *user.LoginRequest) (*user.UserId, error) {
-	//TODO implement me
-	panic("implement me")
+func (s *UserService) AddUserByAdmin(ctx context.Context, request *user.AddUserRequest) (*user.UserId, error) {
+	if !s.uc.IsAdmin(ctx) {
+		return nil, errors.New(403, "", "Forbidden")
+	}
+
+	userId, err := s.uc.CreateNewUser(ctx, request.Username, request.Password, request.IsAdmin)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user.UserId{UserId: userId}, nil
 }
