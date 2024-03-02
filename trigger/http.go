@@ -21,8 +21,8 @@ func NewHTTPServer(config *conf.Trigger, jwtConfig *conf.JWT, logger log.Logger)
 				"/api.web.user.User/GetAllUserList",
 				"/api.web.user.User/AddUserByAdmin",
 				"/api.web.user.User/UserAuth",
-				"/web.web.user.User/GetUserGreenHorseList",
-				"/web.web.user.User/BindDevice",
+				"/api.web.user.User/GetUserGreenHorseList",
+				"/api.web.user.User/BindDevice",
 
 				"/api.web.greenhouse.Greenhouse/GetGreenhouseInfoByUserId",
 				"/api.web.greenhouse.Greenhouse/CreateGreenhouse",

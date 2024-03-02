@@ -19,9 +19,9 @@ type DeviceDao struct {
 
 func (d DeviceDao) CreateDeviceInfo(ctx context.Context, deviceCode string) (device *model.Device, err error) {
 	var de *model.Device
-	d.data.Db.Where("device_id=", deviceCode).First(&de)
+	tx := d.data.Db.Where("device_id = ?", deviceCode).First(&de)
 
-	if de != nil {
+	if tx.RowsAffected != 0 {
 		return nil, errors.New(409, "", "device code has exist")
 	}
 

@@ -44,6 +44,9 @@ func (s *UserService) BindDevice(ctx context.Context, req *user.BindDeviceInfo) 
 }
 
 func (s *UserService) GetAllUserList(ctx context.Context, req *user.Page) (rsp *user.UserList, err error) {
+	if !s.uc.IsAdmin(ctx) {
+		return nil, errors.New(403, "", "Forbidden")
+	}
 	list, err := s.uc.GetUserList(ctx, req.Page, req.Size)
 	if err != nil {
 		return nil, err

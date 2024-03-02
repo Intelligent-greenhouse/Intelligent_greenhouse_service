@@ -20,17 +20,14 @@ type userDao struct {
 
 func (r *userDao) CreateUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error) {
 	var userInfo *model.User
-	err := r.data.Db.Where(&model.User{Username: name}).First(&userInfo).Error
-	if err != nil {
-		return 0, err
-	}
+	tx := r.data.Db.Where("username = ?", name).First(&userInfo)
 
-	if userInfo != nil {
+	if tx.RowsAffected != 0 {
 		return 0, errors.New(409, "", "username has exist")
 	}
 
 	newUser := &model.User{Username: name, Password: psw, IsAdmin: isAdmin}
-	if err = r.data.Db.Create(&newUser).Error; err != nil {
+	if err := r.data.Db.Create(&newUser).Error; err != nil {
 		return 0, err
 	}
 
