@@ -34,8 +34,12 @@ func (s *UserService) UserAuth(ctx context.Context, req *emptypb.Empty) (rsp *us
 }
 
 func (s *UserService) BindDevice(ctx context.Context, req *user.BindDeviceInfo) (rsp *emptypb.Empty, err error) {
-	//TODO implement me
-	panic("implement me")
+	err = s.uc.BindDeviceAndGreenhouse(ctx, req.DeviceCode, req.GreenHouseId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
 }
 
 func (s *UserService) GetAllUserList(ctx context.Context, req *emptypb.Empty) (rsp *user.UserList, err error) {

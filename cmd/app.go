@@ -38,7 +38,7 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 		// 其他的关闭动作
 	}
 
-	userCase := userDomain.NewUserDomain(user.GetUserDaoInstance(), deviceDao.GetDeviceDaoInstance(), logger)
+	userCase := userDomain.NewUserDomain(user.GetUserDaoInstance(), deviceDao.GetDeviceDaoInstance(), greenhouseDao.GetGreenhouseDaoInstance(), logger)
 	s1 := userService.NewUserService(userCase)
 	userAPI.RegisterUserHTTPServer(httpServer, s1)
 

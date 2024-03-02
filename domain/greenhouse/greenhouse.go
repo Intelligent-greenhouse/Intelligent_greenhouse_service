@@ -1,10 +1,15 @@
 package greenhouse
 
 import (
+	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"intelligent-greenhouse-service/model"
 )
 
 type GreenhouseRepo interface {
+	GetGreenhouseInfoById(ctx context.Context, id int32) (*model.Greenhouse, error)
+	GetGreenhouseBandInfo(ctx context.Context, deviceId, greenhouseId int32) error
+	BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId int32) error
 }
 
 type GreenhouseDomain struct {

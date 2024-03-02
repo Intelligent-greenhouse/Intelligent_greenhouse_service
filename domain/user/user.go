@@ -2,8 +2,10 @@ package user
 
 import (
 	"context"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"intelligent-greenhouse-service/domain/device"
+	"intelligent-greenhouse-service/domain/greenhouse"
 	jwt "intelligent-greenhouse-service/middleware"
 	"intelligent-greenhouse-service/model"
 )
@@ -16,17 +18,19 @@ type UserRepo interface {
 
 // UserDomain .
 type UserDomain struct {
-	userRepo   UserRepo
-	deviceRepo device.DeviceRepo
-	log        *log.Helper
+	userRepo       UserRepo
+	deviceRepo     device.DeviceRepo
+	greenhouseRepo greenhouse.GreenhouseRepo
+	log            *log.Helper
 }
 
 // NewUserDomain .
-func NewUserDomain(userRepo UserRepo, deviceRepo device.DeviceRepo, logger log.Logger) *UserDomain {
+func NewUserDomain(userRepo UserRepo, deviceRepo device.DeviceRepo, greenhouseRepo greenhouse.GreenhouseRepo, logger log.Logger) *UserDomain {
 	return &UserDomain{
-		userRepo:   userRepo,
-		deviceRepo: deviceRepo,
-		log:        log.NewHelper(logger),
+		userRepo:       userRepo,
+		deviceRepo:     deviceRepo,
+		greenhouseRepo: greenhouseRepo,
+		log:            log.NewHelper(logger),
 	}
 }
 
@@ -55,4 +59,24 @@ func (uc UserDomain) GetUserInfo(ctx context.Context, userId int32) (*model.User
 
 func (uc UserDomain) RegisterDevice(ctx context.Context, deviceCode string) (*model.Device, error) {
 	return uc.deviceRepo.CreateDeviceInfo(ctx, deviceCode)
+}
+
+func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, greenhouseId int32) error {
+	// 查找设备是否存在
+	deviceInfo, err := uc.deviceRepo.GetDeviceById(ctx, deviceId)
+	if err != nil {
+		return err
+	}
+	// 绑定设备必须在设备未激活的情况下
+	if deviceInfo.IsActivation {
+		return errors.New("device has active")
+	}
+
+	// 查找大棚是否存在
+	if _, err = uc.greenhouseRepo.GetGreenhouseInfoById(ctx, greenhouseId); err != nil {
+		return err
+	}
+
+	// 绑定数据
+	return uc.greenhouseRepo.BandGreenhouseAndDevice(ctx, deviceId, greenhouseId)
 }

@@ -1,16 +1,36 @@
 package greenhouse
 
 import (
+	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"intelligent-greenhouse-service/conf"
 	"intelligent-greenhouse-service/domain/greenhouse"
 	"intelligent-greenhouse-service/infra"
+	"intelligent-greenhouse-service/model"
 )
 
 type GreenhouseDao struct {
 	data *infra.Data
 	log  *log.Helper
 	conf *conf.Bootstrap
+}
+
+func (g GreenhouseDao) BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId int32) error {
+	err := g.data.Db.Find(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
+	if err != nil {
+		return nil
+	}
+
+	return g.data.Db.Create(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
+}
+
+func (g GreenhouseDao) GetGreenhouseBandInfo(ctx context.Context, deviceId, greenhouseId int32) error {
+	return g.data.Db.Find(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
+}
+
+func (g GreenhouseDao) GetGreenhouseInfoById(ctx context.Context, id int32) (info *model.Greenhouse, err error) {
+	err = g.data.Db.Find(&info, id).Error
+	return
 }
 
 var instance *GreenhouseDao
