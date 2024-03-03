@@ -1,8 +1,4 @@
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
-github.com/cypunsource/cypunsource-tool v0.0.0-20240107162651-e3c274d826ce h1:ZZYPUK5R5UV+OaIbIvWQ9zhOcLVFFNozp0TVMY0swHE=
-github.com/cypunsource/cypunsource-tool v0.0.0-20240107162651-e3c274d826ce/go.mod h1:v//P5oBN8ibD1rgb/7O0HNRn4gJQO+cZRdejqSY2lzk=
-github.com/cypunsource/cypunsource-tool v0.0.0-20240126082006-135487d75236 h1:LB7sI1vNaAD5SAPPMij9UWSsRUTYqrlC25vW4TBhfC8=
-github.com/cypunsource/cypunsource-tool v0.0.0-20240126082006-135487d75236/go.mod h1:v//P5oBN8ibD1rgb/7O0HNRn4gJQO+cZRdejqSY2lzk=
 github.com/cypunsource/cypunsource-tool v0.0.0-20240301122035-21e5bcdc345f h1:qJRoyY5VRFHUS+ZvKvWkhZ2MFu+x+kTiH0PqZ4GwKEk=
 github.com/cypunsource/cypunsource-tool v0.0.0-20240301122035-21e5bcdc345f/go.mod h1:v//P5oBN8ibD1rgb/7O0HNRn4gJQO+cZRdejqSY2lzk=
 github.com/cypunsource/kratos-extension v0.0.0-20240106041841-b206537fd3ea h1:P3wdmDpykvS5MhNOcKCoyz+xpfRLC9kqLX+4FoDKxSU=
@@ -10,6 +6,8 @@ github.com/cypunsource/kratos-extension v0.0.0-20240106041841-b206537fd3ea/go.mo
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/eclipse/paho.mqtt.golang v1.4.3 h1:2kwcUGn8seMUfWndX0hGbvH8r7crgcJguQNCyp70xik=
+github.com/eclipse/paho.mqtt.golang v1.4.3/go.mod h1:CSYvoAlsMkhYOXh/oKyxa8EcBci6dVkLCbo5tTC1RIE=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=
 github.com/fsnotify/fsnotify v1.6.0/go.mod h1:sl3t1tCWJFWoRz9R8WJCbQihKKwmorjAbSClcnxKAGw=
 github.com/go-kratos/aegis v0.2.0 h1:dObzCDWn3XVjUkgxyBp6ZeWtx/do0DPZ7LY3yNSJLUQ=
@@ -34,6 +32,8 @@ github.com/google/uuid v1.3.1 h1:KjJaJ9iWZ3jOFZIf1Lqf4laDRCasjl0BCmnEGxkdLb4=
 github.com/google/uuid v1.3.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
+github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
+github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/imdario/mergo v0.3.16 h1:wwQJbIsHYGMUyLSPrEq1CT16AhnhNJQ51+4fdHUnCl4=
 github.com/imdario/mergo v0.3.16/go.mod h1:WBLT9ZmE3lPoWsEzCh9LPo3TiwVN+ZKEjmz+hD27ysY=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=

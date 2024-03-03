@@ -3,6 +3,7 @@ package device
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"intelligent-greenhouse-service/infra"
 	"intelligent-greenhouse-service/model"
 )
 
@@ -12,12 +13,14 @@ type DeviceRepo interface {
 }
 
 type DeviceDomain struct {
+	mqtt *infra.Mqtt
 	repo DeviceRepo
 	log  *log.Helper
 }
 
-func NewDeviceDomain(repo DeviceRepo, logger log.Logger) *DeviceDomain {
+func NewDeviceDomain(repo DeviceRepo, logger log.Logger, m *infra.Mqtt) *DeviceDomain {
 	return &DeviceDomain{
+		mqtt: m,
 		repo: repo,
 		log:  log.NewHelper(logger),
 	}

@@ -28,6 +28,8 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 		return nil, nil, err
 	}
 
+	mqtt, err := infra.NewMqttClient(config.Trigger)
+
 	userDao.NewUserDao(data, config, logger)
 	deviceDao.NewDeviceDao(data, config, logger)
 	greenhouseDao.NewGreenhouseDao(data, config, logger)
@@ -46,7 +48,7 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 	s2 := greenService.NewUserService(greenhouseCase)
 	greenhouseAPI.RegisterGreenhouseHTTPServer(httpServer, s2)
 
-	deviceCase := deviceDomain.NewDeviceDomain(deviceDao.GetDeviceDaoInstance(), logger)
+	deviceCase := deviceDomain.NewDeviceDomain(deviceDao.GetDeviceDaoInstance(), logger, mqtt)
 	s3 := deviceService.NewDeviceService(deviceCase)
 	deviceAPI.RegisterDeviceHTTPServer(httpServer, s3)
 
