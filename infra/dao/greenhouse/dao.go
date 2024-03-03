@@ -3,9 +3,11 @@ package greenhouse
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
 	"intelligent-greenhouse-service/conf"
 	"intelligent-greenhouse-service/domain/greenhouse"
 	"intelligent-greenhouse-service/infra"
+	jwt "intelligent-greenhouse-service/middleware"
 	"intelligent-greenhouse-service/model"
 )
 
@@ -13,6 +15,34 @@ type GreenhouseDao struct {
 	data *infra.Data
 	log  *log.Helper
 	conf *conf.Bootstrap
+}
+
+func (g GreenhouseDao) CreateGreenhouse(ctx context.Context, size int32, name, pos string) (*model.Greenhouse, error) {
+	newGreenhouse := &model.Greenhouse{
+		Name: name,
+		Pos:  pos,
+		Size: size,
+	}
+
+	err := g.data.Db.Transaction(func(tx *gorm.DB) error {
+		err := tx.Create(&newGreenhouse).Error
+		if err != nil {
+			return err
+		}
+
+		userInfo, _ := jwt.FromLoginTokenContext(ctx)
+		err = tx.Create(&model.UserGreenhouse{
+			GreenhouseId: newGreenhouse.ID,
+			UserId:       userInfo.UserID,
+		}).Error
+
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return newGreenhouse, nil
 }
 
 func (g GreenhouseDao) GetGreenhouseListByUserId(ctx context.Context, userId int32) ([]*model.Greenhouse, error) {
