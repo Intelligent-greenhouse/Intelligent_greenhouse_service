@@ -7,7 +7,7 @@ import (
 )
 
 type Mqtt struct {
-	Mq *mqtt.Client
+	Mq mqtt.Client
 }
 
 func NewMqttClient(c *conf.Trigger) (*Mqtt, error) {
@@ -17,5 +17,5 @@ func NewMqttClient(c *conf.Trigger) (*Mqtt, error) {
 		return nil, token.Error()
 	}
 
-	return &Mqtt{Mq: &mqttClient}, nil
+	return &Mqtt{Mq: mqttClient}, nil
 }

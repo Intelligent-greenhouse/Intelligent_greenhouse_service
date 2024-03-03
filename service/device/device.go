@@ -16,6 +16,6 @@ func NewDeviceService(uc *domain_device.DeviceDomain) *DeviceService {
 }
 
 func (d DeviceService) UpdateDeviceInfo(ctx context.Context, request *v1.UpdateDeviceInfoRequest) (*emptypb.Empty, error) {
-	//TODO implement me
-	panic("implement me")
+	d.uc.MqttTest(ctx)
+	return nil, nil
 }

@@ -33,3 +33,7 @@ func (d DeviceDomain) GetDeviceInfoByDeviceId(ctx context.Context, deviceId int3
 func (d DeviceDomain) CreateDevice(ctx context.Context, deviceCode string) (*model.Device, error) {
 	return d.repo.CreateDeviceInfo(ctx, deviceCode)
 }
+
+func (d DeviceDomain) MqttTest(ctx context.Context) {
+	d.mqtt.Mq.Publish("service", 0, false, "hello")
+}
