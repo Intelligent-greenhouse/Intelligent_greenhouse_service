@@ -40,5 +40,5 @@ go build -ldflags "-X main.Version=`git describe --tags --always`" -o ./bin/app 
 
 #### 构建容器
 ```bash
-docker build -t cypunsource/cypunsource-tool:`git describe --tags --always` .
+docker build -t intelligent-greenhouse-service:`git describe --tags --always` .
 ```
