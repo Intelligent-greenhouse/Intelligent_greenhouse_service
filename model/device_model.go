@@ -28,6 +28,7 @@ type Device struct {
 
 	IsActivation bool      `json:"isActivation" gorm:"colum:is_activation"`
 	RunTime      time.Time `json:"runtime" gorm:"colum:run_time"`
+	Des          string    `json:"des" gorm:"colum:des"`
 
 	database.DeleteModel
 	database.MetadataTimeModel

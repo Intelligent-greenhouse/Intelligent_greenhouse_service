@@ -80,8 +80,9 @@ func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, gree
 		return err
 	}
 
+	userInfo, _ := jwt.FromLoginTokenContext(ctx)
 	// 绑定数据
-	return uc.greenhouseRepo.BandGreenhouseAndDevice(ctx, deviceId, greenhouseId)
+	return uc.greenhouseRepo.BandGreenhouseAndDevice(ctx, deviceId, greenhouseId, userInfo.UserID)
 }
 
 func (uc UserDomain) GetUserList(ctx context.Context, page, size int32) ([]*model.User, error) {

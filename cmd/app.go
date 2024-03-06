@@ -44,7 +44,7 @@ func newApp(config *conf.Bootstrap, logger log.Logger) (*kratos.App, func(), err
 	s1 := userService.NewUserService(userCase)
 	userAPI.RegisterUserHTTPServer(httpServer, s1)
 
-	greenhouseCase := greenhouseDomain.NewGreenhouseDomain(greenhouseDao.GetGreenhouseDaoInstance(), logger)
+	greenhouseCase := greenhouseDomain.NewGreenhouseDomain(greenhouseDao.GetGreenhouseDaoInstance(), logger, deviceDao.GetDeviceDaoInstance())
 	s2 := greenService.NewUserService(greenhouseCase)
 	greenhouseAPI.RegisterGreenhouseHTTPServer(httpServer, s2)
 

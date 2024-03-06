@@ -4,6 +4,7 @@ import (
 	"context"
 	greenhouseapi "intelligent-greenhouse-service/api/web/greenhouse"
 	domain_greenhouse "intelligent-greenhouse-service/domain/greenhouse"
+	"intelligent-greenhouse-service/model"
 )
 
 type GreenhouseService struct {
@@ -39,4 +40,40 @@ func (g GreenhouseService) GetGreenhouseInfoByUserId(ctx context.Context, reques
 	}
 
 	return &greenhouseapi.GetGreenhouseInfoByUserIdReply{List: greenHouseList}, nil
+}
+
+func (g GreenhouseService) GetGreenhouseAllDeviceInfo(ctx context.Context, id *greenhouseapi.GreenhouseId) (*greenhouseapi.GetGreenhouseAllDeviceInfoReply, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g GreenhouseService) GetDeviceInfo(ctx context.Context, id *greenhouseapi.DeviceId) (*greenhouseapi.DeviceInfo, error) {
+	deviceInfo, err := g.uc.GetDeviceInfoByDeviceId(ctx, id.DeviceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return deviceInfoPointer(deviceInfo), nil
+}
+
+var deviceInfoPointer = func(d *model.Device) *greenhouseapi.DeviceInfo {
+	return &greenhouseapi.DeviceInfo{
+		DeviceCode:          d.DeviceId,
+		Co2:                 d.SoilConductivity,
+		LightIntensity:      d.LightIntensity,
+		AirTemperature:      d.AirTemperature,
+		AirHumidity:         d.AirHumidity,
+		SoilTemperature:     d.SoilPH,
+		SoilMoisture:        d.SoilMoisture,
+		SoilConductivity:    d.SoilConductivity,
+		SoilPh:              d.SoilPH,
+		Led:                 d.Led,
+		Fan:                 d.Fan,
+		Water:               d.Water,
+		ChemicalFertilizer:  d.ChemicalFertilizer,
+		IncreaseTemperature: d.IncreaseTemperature,
+		ReduceTemperature:   d.ReduceTemperature,
+		Buzzer:              d.Buzzer,
+		Des:                 d.Des,
+	}
 }

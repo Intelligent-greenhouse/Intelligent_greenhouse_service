@@ -2,6 +2,7 @@ package greenhouse
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"gorm.io/gorm"
 	"intelligent-greenhouse-service/conf"
@@ -59,8 +60,23 @@ func (g GreenhouseDao) GetGreenhouseListByUserId(ctx context.Context, userId int
 	return greenList, nil
 }
 
-func (g GreenhouseDao) BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId int32) error {
+func (g GreenhouseDao) BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId, userId int32) error {
 	err := g.data.Db.Find(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
+	if err != nil {
+		return err
+	}
+
+	userDevice := &model.UserDevice{
+		UserId:   userId,
+		DeviceId: deviceId,
+	}
+
+	err = g.data.Db.Find(&userDevice).Error
+	if err == nil {
+		return errors.New(409, "", "Device bound")
+	}
+
+	err = g.data.Db.Create(&userDevice).Error
 	if err != nil {
 		return nil
 	}

@@ -17,6 +17,16 @@ type DeviceDao struct {
 	conf *conf.Bootstrap
 }
 
+func (d DeviceDao) GetUserDevice(ctx context.Context, deviceId, userId int32) (*model.UserDevice, error) {
+	var ud model.UserDevice
+	err := d.data.Db.Where("user_id = ? AND device_id = ?", userId, deviceId).First(&ud).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &ud, nil
+}
+
 func (d DeviceDao) CreateDeviceInfo(ctx context.Context, deviceCode string) (device *model.Device, err error) {
 	var de *model.Device
 	tx := d.data.Db.Where("device_id = ?", deviceCode).First(&de)

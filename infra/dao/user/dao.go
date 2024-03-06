@@ -58,7 +58,7 @@ func (r *userDao) GetUserInfoByUserId(ctx context.Context, userId int32) (*model
 func (r *userDao) Login(ctx context.Context, userName, passWord string) (id int32, err error) {
 	// 获取数据库用户信息
 	var userInfo model.User
-	tx := r.data.Db.Where(&model.User{Username: userName, Password: passWord}).First(&userInfo)
+	tx := r.data.Db.Where("username = ? AND password = ?", userName, passWord).First(&userInfo)
 	err = tx.Error
 	if err != nil {
 		return 0, errors.New(404, "", "user not found")

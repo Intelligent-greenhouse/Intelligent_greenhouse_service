@@ -10,6 +10,7 @@ import (
 type DeviceRepo interface {
 	GetDeviceById(ctx context.Context, deviceId int32) (*model.Device, error)
 	CreateDeviceInfo(ctx context.Context, deviceCode string) (*model.Device, error)
+	GetUserDevice(ctx context.Context, deviceId, userId int32) (*model.UserDevice, error)
 }
 
 type DeviceDomain struct {
