@@ -20,4 +20,4 @@ conn_max_lifetime = "30s"
 
 [jwt]
 verify_key = "12345"
-login_expire_time = 360000
+login_expire_time = "36000s"
