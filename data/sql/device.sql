@@ -22,6 +22,7 @@ CREATE TABLE device
 
     is_activation           BOOLEAN                 NOT NULL            COMMENT '激活状态',
     run_time                DATETIME                NULL                COMMENT '正常运行时间戳',
+    des                     TEXT                    NULL                COMMENT '设备检测信息描述',
     ctime                   DATETIME                NULL                COMMENT '创建时间',
     mtime                   DATETIME                NULL                COMMENT '修改时间',
     deleted                 BOOLEAN DEFAULT FALSE   NOT NULL            COMMENT '是否删除'
