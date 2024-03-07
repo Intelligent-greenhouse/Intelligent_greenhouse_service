@@ -43,8 +43,17 @@ func (g GreenhouseService) GetGreenhouseInfoByUserId(ctx context.Context, reques
 }
 
 func (g GreenhouseService) GetGreenhouseAllDeviceInfo(ctx context.Context, id *greenhouseapi.GreenhouseId) (*greenhouseapi.GetGreenhouseAllDeviceInfoReply, error) {
-	//TODO implement me
-	panic("implement me")
+	deviceInfo, err := g.uc.GetDeviceListByGreenhouseId(ctx, id.GreenhouseId)
+	if err != nil {
+		return nil, err
+	}
+
+	var deviceList []*greenhouseapi.DeviceInfo
+	for _, d := range deviceInfo {
+		deviceList = append(deviceList, deviceInfoPointer(d))
+	}
+
+	return &greenhouseapi.GetGreenhouseAllDeviceInfoReply{List: deviceList}, nil
 }
 
 func (g GreenhouseService) GetDeviceInfo(ctx context.Context, id *greenhouseapi.DeviceId) (*greenhouseapi.DeviceInfo, error) {

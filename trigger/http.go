@@ -26,6 +26,8 @@ func NewHTTPServer(config *conf.Trigger, jwtConfig *conf.JWT, logger log.Logger)
 
 				"/api.web.greenhouse.Greenhouse/GetGreenhouseInfoByUserId",
 				"/api.web.greenhouse.Greenhouse/CreateGreenhouse",
+				"/api.web.greenhouse.Greenhouse/GetDeviceInfo",
+				"/api.web.greenhouse.Greenhouse/GetGreenhouseAllDeviceInfo",
 			).Build(),
 		),
 	}
