@@ -14,6 +14,7 @@ type GreenhouseRepo interface {
 	GetGreenhouseBandInfo(ctx context.Context, deviceId, greenhouseId int32) error
 	BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId, userId int32) error
 	CreateGreenhouse(ctx context.Context, size int32, name, pos string) (*model.Greenhouse, error)
+	GetDeviceIdListByGreenhouseId(ctx context.Context, greenhouseId int32) ([]int32, error)
 }
 
 type GreenhouseDomain struct {
@@ -50,4 +51,13 @@ func (g GreenhouseDomain) GetDeviceInfoByDeviceId(ctx context.Context, deviceId 
 	}
 
 	return g.deviceRepo.GetDeviceById(ctx, deviceId)
+}
+
+func (g GreenhouseDomain) GetDeviceListByGreenhouseId(ctx context.Context, greenhouseId int32) ([]*model.Device, error) {
+	idList, err := g.greenhouseRepo.GetDeviceIdListByGreenhouseId(ctx, greenhouseId)
+	if err != nil {
+		return nil, err
+	}
+
+	return g.deviceRepo.GetDeviceList(ctx, idList)
 }

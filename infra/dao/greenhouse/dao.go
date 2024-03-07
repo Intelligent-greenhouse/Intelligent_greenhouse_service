@@ -18,6 +18,16 @@ type GreenhouseDao struct {
 	conf *conf.Bootstrap
 }
 
+func (g GreenhouseDao) GetDeviceIdListByGreenhouseId(ctx context.Context, greenhouseId int32) ([]int32, error) {
+	var idList []int32
+	err := g.data.Db.Model(&model.GreenhouseDevice{}).Where("greenhouse_id = ?", greenhouseId).Pluck("device_id", &idList).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return idList, nil
+}
+
 func (g GreenhouseDao) CreateGreenhouse(ctx context.Context, size int32, name, pos string) (*model.Greenhouse, error) {
 	newGreenhouse := &model.Greenhouse{
 		Name: name,
@@ -61,27 +71,49 @@ func (g GreenhouseDao) GetGreenhouseListByUserId(ctx context.Context, userId int
 }
 
 func (g GreenhouseDao) BandGreenhouseAndDevice(ctx context.Context, deviceId, greenhouseId, userId int32) error {
-	err := g.data.Db.Find(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
-	if err != nil {
-		return err
-	}
+	err := g.data.Db.Transaction(func(tx *gorm.DB) (err error) {
 
-	userDevice := &model.UserDevice{
-		UserId:   userId,
-		DeviceId: deviceId,
-	}
+		// 查找用户是否拥对应的大棚数据
+		err = tx.Where(&model.UserGreenhouse{GreenhouseId: greenhouseId, UserId: userId}).First(&model.UserGreenhouse{}).Limit(1).Error
+		if err != nil {
+			return err
+		}
 
-	err = g.data.Db.Find(&userDevice).Error
-	if err == nil {
-		return errors.New(409, "", "Device bound")
-	}
+		// 查找设备是否已经被绑定
+		var existingDevice model.GreenhouseDevice
+		if err = tx.Where(&model.GreenhouseDevice{DeviceId: deviceId}).Limit(1).First(&existingDevice).Error; err == nil {
+			// 设备已绑定
+			return errors.New(409, "", "Device already bound")
+		}
 
-	err = g.data.Db.Create(&userDevice).Error
-	if err != nil {
+		var existingUserDevice model.UserDevice
+		if err = tx.Where(&model.UserDevice{DeviceId: deviceId}).Limit(1).First(&existingUserDevice).Error; err == nil {
+			// 用户和设备的绑定关系已存在
+			return errors.New(409, "", "User and device binding already exists")
+		}
+
+		// 创建用户和设备的绑定关系
+		if err = tx.Create(&model.UserDevice{UserId: userId, DeviceId: deviceId}).Error; err != nil {
+			// 创建失败，回滚事务
+			return err
+		}
+
+		// 创建设备和温室的绑定关系
+		if err = tx.Create(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error; err != nil {
+			// 创建失败，回滚事务
+			return err
+		}
+
+		if err = tx.Model(&model.Device{}).Where("id = ?", deviceId).Update("is_activation", true).Error; err != nil {
+			// 更新失败，回滚事务
+			return err
+		}
+
+		// 提交事务
 		return nil
-	}
+	})
 
-	return g.data.Db.Create(&model.GreenhouseDevice{GreenhouseId: greenhouseId, DeviceId: deviceId}).Error
+	return err
 }
 
 func (g GreenhouseDao) GetGreenhouseBandInfo(ctx context.Context, deviceId, greenhouseId int32) error {

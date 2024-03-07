@@ -20,9 +20,9 @@ type userDao struct {
 
 func (r *userDao) CreateUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error) {
 	var userInfo *model.User
-	tx := r.data.Db.Where("username = ?", name).First(&userInfo)
+	tx := r.data.Db.Where("username = ?", name).First(&userInfo).Limit(1)
 
-	if tx.RowsAffected != 0 {
+	if tx.Error != nil {
 		return 0, errors.New(409, "", "username has exist")
 	}
 

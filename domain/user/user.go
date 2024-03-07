@@ -2,7 +2,8 @@ package user
 
 import (
 	"context"
-	"errors"
+	"github.com/go-kratos/kratos/v2/errors"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"intelligent-greenhouse-service/domain/device"
 	"intelligent-greenhouse-service/domain/greenhouse"
@@ -72,7 +73,7 @@ func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, gree
 	}
 	// 绑定设备必须在设备未激活的情况下
 	if deviceInfo.IsActivation {
-		return errors.New("device has active")
+		return errors.New(403, "", "device has active")
 	}
 
 	// 查找大棚是否存在
@@ -94,5 +95,9 @@ func (uc UserDomain) GetUserGreenHouseList(ctx context.Context, userId int32) ([
 }
 
 func (uc UserDomain) CreateNewUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error) {
+	if name == "" || psw == "" {
+		return 0, errors.New(400, "", "Bad Request")
+	}
+
 	return uc.userRepo.CreateUser(ctx, name, psw, isAdmin)
 }

@@ -17,6 +17,11 @@ type DeviceDao struct {
 	conf *conf.Bootstrap
 }
 
+func (d DeviceDao) GetDeviceList(ctx context.Context, deviceIdList []int32) (deviceList []*model.Device, err error) {
+	err = d.data.Db.Where("id in ?", deviceIdList).Find(&deviceList).Error
+	return
+}
+
 func (d DeviceDao) GetUserDevice(ctx context.Context, deviceId, userId int32) (*model.UserDevice, error) {
 	var ud model.UserDevice
 	err := d.data.Db.Where("user_id = ? AND device_id = ?", userId, deviceId).First(&ud).Error
