@@ -17,6 +17,7 @@ type UserRepo interface {
 	GetUserInfoByUserId(ctx context.Context, userId int32) (*model.User, error)
 	GetUserInfoList(ctx context.Context, page, size int32) ([]*model.User, error)
 	CreateUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error)
+	GetUserCount(ctx context.Context) (int32, error)
 }
 
 // UserDomain .
@@ -100,4 +101,8 @@ func (uc UserDomain) CreateNewUser(ctx context.Context, name, psw string, isAdmi
 	}
 
 	return uc.userRepo.CreateUser(ctx, name, psw, isAdmin)
+}
+
+func (uc UserDomain) GetUserCount(ctx context.Context) (int32, error) {
+	return uc.GetUserCount(ctx)
 }

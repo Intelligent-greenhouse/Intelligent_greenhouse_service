@@ -17,6 +17,22 @@ type DeviceDao struct {
 	conf *conf.Bootstrap
 }
 
+func (d DeviceDao) UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error {
+	return d.data.Db.Model(&model.Device{}).Where("device_id = ?", deviceCode).Update("des", msg).Error
+}
+
+func (d DeviceDao) UpdateDeviceInfo(ctx context.Context, deviceInfo *model.Device) (err error) {
+	var od *model.Device
+	err = d.data.Db.Where("device_id = ?", deviceInfo.DeviceId).First(&od).Limit(1).Error
+	if err != nil {
+		return
+	}
+
+	deviceInfo.DeviceId = od.DeviceId
+	err = d.data.Db.Save(&deviceInfo).Error
+	return
+}
+
 func (d DeviceDao) GetDeviceList(ctx context.Context, deviceIdList []int32) (deviceList []*model.Device, err error) {
 	err = d.data.Db.Where("id in ?", deviceIdList).Find(&deviceList).Error
 	return

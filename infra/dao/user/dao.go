@@ -18,6 +18,16 @@ type userDao struct {
 	conf *conf.Bootstrap
 }
 
+func (r *userDao) GetUserCount(ctx context.Context) (int32, error) {
+	var count int64
+	err := r.data.Db.Model(&model.User{}).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return int32(count), nil
+}
+
 func (r *userDao) CreateUser(ctx context.Context, name, psw string, isAdmin bool) (int32, error) {
 	var userInfo *model.User
 	tx := r.data.Db.Where("username = ?", name).First(&userInfo).Limit(1)

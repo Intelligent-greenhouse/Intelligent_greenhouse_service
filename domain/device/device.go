@@ -12,6 +12,8 @@ type DeviceRepo interface {
 	CreateDeviceInfo(ctx context.Context, deviceCode string) (*model.Device, error)
 	GetUserDevice(ctx context.Context, deviceId, userId int32) (*model.UserDevice, error)
 	GetDeviceList(ctx context.Context, deviceIdList []int32) ([]*model.Device, error)
+	UpdateDeviceInfo(ctx context.Context, deviceInfo *model.Device) error
+	UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error
 }
 
 type DeviceDomain struct {
@@ -38,4 +40,12 @@ func (d DeviceDomain) CreateDevice(ctx context.Context, deviceCode string) (*mod
 
 func (d DeviceDomain) MqttTest(ctx context.Context) {
 	d.mqtt.Mq.Publish("service", 0, false, "hello")
+}
+
+func (d DeviceDomain) UpdateDeviceInfo(ctx context.Context, deviceInfo *model.Device) error {
+	return d.repo.UpdateDeviceInfo(ctx, deviceInfo)
+}
+
+func (d DeviceDomain) UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error {
+	return d.repo.UpdateDeviceDes(ctx, deviceCode, msg)
 }

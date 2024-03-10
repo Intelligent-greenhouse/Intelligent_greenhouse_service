@@ -75,6 +75,7 @@ func (s *UserService) GetUserGreenHorseList(ctx context.Context, req *user.UserI
 	for _, g := range list {
 		greenHouseList = append(greenHouseList, &user.GreenHouse{
 			Id:   g.ID,
+			Name: g.Name,
 			Pos:  g.Pos,
 			Size: g.Size,
 			Des:  g.Des,
@@ -108,4 +109,13 @@ func (s *UserService) AddUserByAdmin(ctx context.Context, request *user.AddUserR
 	}
 
 	return &user.UserId{UserId: userId}, nil
+}
+
+func (s *UserService) GetAllUserCount(ctx context.Context, empty *emptypb.Empty) (*user.GetAllUserCountReply, error) {
+	count, err := s.uc.GetUserCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &user.GetAllUserCountReply{Count: count}, nil
 }
