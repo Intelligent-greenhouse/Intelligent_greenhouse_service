@@ -17,6 +17,32 @@ type DeviceDao struct {
 	conf *conf.Bootstrap
 }
 
+func (d DeviceDao) SetDeviceButton(ctx context.Context, buttonInfo *model.Device) error {
+	var deviceInfo model.Device
+	err := d.data.Db.Where("id = ?", buttonInfo.ID, &deviceInfo).Error
+	if err != nil {
+		return err
+	}
+
+	if deviceInfo.IsActivation {
+		return errors.New(403, "", "deviceMode: auto")
+	}
+
+	deviceInfo.Led = buttonInfo.Led
+	deviceInfo.Fan = buttonInfo.Fan
+	deviceInfo.Water = buttonInfo.Water
+	deviceInfo.ChemicalFertilizer = buttonInfo.ChemicalFertilizer
+	deviceInfo.IncreaseTemperature = buttonInfo.IncreaseTemperature
+	deviceInfo.ReduceTemperature = buttonInfo.ReduceTemperature
+	deviceInfo.Buzzer = buttonInfo.Buzzer
+
+	return d.data.Db.Updates(&deviceInfo).Error
+}
+
+func (d DeviceDao) SetActiveMode(ctx context.Context, mode bool, deviceId int32) error {
+	return d.data.Db.Model(&model.Device{}).Where("id = ?", deviceId).Update("is_activation", mode).Error
+}
+
 func (d DeviceDao) UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error {
 	return d.data.Db.Model(&model.Device{}).Where("device_id = ?", deviceCode).Update("des", msg).Error
 }

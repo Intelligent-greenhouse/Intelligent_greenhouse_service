@@ -34,6 +34,23 @@ func (d DeviceService) UpdateDeviceDes(ctx context.Context, request *v1.DeviceDe
 	return &emptypb.Empty{}, nil
 }
 
+func (d DeviceService) SetDeviceAutoMode(ctx context.Context, id *v1.DeviceId) (*emptypb.Empty, error) {
+	err := d.uc.SetDeviceAutoMode(ctx, id.Mode, id.DeviceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (d DeviceService) SetDeviceButtonSwitch(ctx context.Context, deviceSwitch *v1.DeviceSwitch) (*emptypb.Empty, error) {
+	err := d.uc.SetDeviceButtonSwitch(ctx, bodyDeviceButtonInfoPointer(deviceSwitch))
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}
+
 var bodyDevicePointer = func(d *v1.UpdateDeviceInfoRequest) *model.Device {
 	return &model.Device{
 		DeviceId:            d.DeviceCode,
@@ -45,6 +62,19 @@ var bodyDevicePointer = func(d *v1.UpdateDeviceInfoRequest) *model.Device {
 		SoilMoisture:        d.SoilMoisture,
 		SoilConductivity:    d.SoilConductivity,
 		SoilPH:              d.SoilPh,
+		Led:                 d.Led,
+		Fan:                 d.Fan,
+		Water:               d.Water,
+		ChemicalFertilizer:  d.ChemicalFertilizer,
+		IncreaseTemperature: d.IncreaseTemperature,
+		ReduceTemperature:   d.ReduceTemperature,
+		Buzzer:              d.Buzzer,
+		RunTime:             time.Time{},
+	}
+}
+
+var bodyDeviceButtonInfoPointer = func(d *v1.DeviceSwitch) *model.Device {
+	return &model.Device{
 		Led:                 d.Led,
 		Fan:                 d.Fan,
 		Water:               d.Water,

@@ -68,13 +68,9 @@ func (uc UserDomain) RegisterDevice(ctx context.Context, deviceCode string) (*mo
 func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, greenhouseId int32) error {
 
 	// 查找设备是否存在
-	deviceInfo, err := uc.deviceRepo.GetDeviceById(ctx, deviceId)
+	_, err := uc.deviceRepo.GetDeviceById(ctx, deviceId)
 	if err != nil {
 		return err
-	}
-	// 绑定设备必须在设备未激活的情况下
-	if deviceInfo.IsActivation {
-		return errors.New(403, "", "device has active")
 	}
 
 	// 查找大棚是否存在
