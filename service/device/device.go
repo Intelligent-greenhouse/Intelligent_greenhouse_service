@@ -51,6 +51,15 @@ func (d DeviceService) SetDeviceButtonSwitch(ctx context.Context, deviceSwitch *
 	return &emptypb.Empty{}, nil
 }
 
+func (d DeviceService) GetDeviceAutoMode(ctx context.Context, mode *v1.GetDeviceMode) (*v1.DeviceAutoInfo, error) {
+	deviceMode, err := d.uc.GetDeviceMode(ctx, mode.DeviceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &v1.DeviceAutoInfo{Mode: deviceMode}, nil
+}
+
 var bodyDevicePointer = func(d *v1.UpdateDeviceInfoRequest) *model.Device {
 	return &model.Device{
 		DeviceId:            d.DeviceCode,
