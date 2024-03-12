@@ -67,6 +67,7 @@ func (g GreenhouseService) GetDeviceInfo(ctx context.Context, id *greenhouseapi.
 
 var deviceInfoPointer = func(d *model.Device) *greenhouseapi.DeviceInfo {
 	return &greenhouseapi.DeviceInfo{
+		DeviceId:            d.ID,
 		DeviceCode:          d.DeviceId,
 		Co2:                 d.SoilConductivity,
 		LightIntensity:      d.LightIntensity,
