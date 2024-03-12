@@ -65,10 +65,10 @@ func (uc UserDomain) RegisterDevice(ctx context.Context, deviceCode string) (*mo
 	return uc.deviceRepo.CreateDeviceInfo(ctx, deviceCode)
 }
 
-func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, greenhouseId int32) error {
+func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId string, greenhouseId int32) error {
 
 	// 查找设备是否存在
-	_, err := uc.deviceRepo.GetDeviceById(ctx, deviceId)
+	deviceInfo, err := uc.deviceRepo.GetDeviceByDeviceCode(ctx, deviceId)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (uc UserDomain) BindDeviceAndGreenhouse(ctx context.Context, deviceId, gree
 
 	userInfo, _ := jwt.FromLoginTokenContext(ctx)
 	// 绑定数据
-	return uc.greenhouseRepo.BandGreenhouseAndDevice(ctx, deviceId, greenhouseId, userInfo.UserID)
+	return uc.greenhouseRepo.BandGreenhouseAndDevice(ctx, deviceInfo.ID, greenhouseId, userInfo.UserID)
 }
 
 func (uc UserDomain) GetUserList(ctx context.Context, page, size int32) ([]*model.User, error) {

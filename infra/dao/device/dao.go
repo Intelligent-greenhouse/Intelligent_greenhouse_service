@@ -85,6 +85,10 @@ func (d DeviceDao) GetUserDevice(ctx context.Context, deviceId, userId int32) (*
 }
 
 func (d DeviceDao) CreateDeviceInfo(ctx context.Context, deviceCode string) (device *model.Device, err error) {
+	if deviceCode == "" {
+		return nil, errors.New(500, "", "name")
+	}
+
 	var de *model.Device
 	tx := d.data.Db.Where("device_id = ?", deviceCode).First(&de)
 
