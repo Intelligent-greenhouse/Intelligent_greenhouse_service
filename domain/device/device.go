@@ -183,14 +183,28 @@ func (d DeviceDomain) SetDeviceAutoMode(ctx context.Context, mode bool, deviceId
 
 func (d DeviceDomain) SetDeviceButtonSwitch(ctx context.Context, deviceButtonInfo *model.Device) error {
 	userId, _ := jwt.FromLoginTokenContext(ctx)
-	if userId.IsAdmin {
-		return d.repo.SetDeviceButton(ctx, deviceButtonInfo)
-	}
 
 	_, err := d.repo.GetUserDevice(ctx, deviceButtonInfo.ID, userId.UserID)
+	if err != nil && !userId.IsAdmin {
+		return err
+	}
+
+	deviceInfo, err := d.repo.GetDeviceById(ctx, deviceButtonInfo.ID)
 	if err != nil {
 		return err
 	}
+
+	buttonSet := &DeviceSwitch{
+		LED:                 deviceButtonInfo.Led,
+		Fan:                 deviceButtonInfo.Fan,
+		Water:               deviceButtonInfo.Water,
+		ChemicalFertilizer:  deviceButtonInfo.ChemicalFertilizer,
+		IncreaseTemperature: deviceButtonInfo.IncreaseTemperature,
+		ReduceTemperature:   deviceButtonInfo.ReduceTemperature,
+		Buzzer:              deviceButtonInfo.Buzzer,
+	}
+	switchInfo, _ := json.Marshal(buttonSet)
+	d.mqtt.Mq.Publish(deviceInfo.DeviceId+"-Command", 0, false, switchInfo)
 
 	return d.repo.SetDeviceButton(ctx, deviceButtonInfo)
 }

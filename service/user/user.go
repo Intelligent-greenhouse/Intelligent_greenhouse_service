@@ -57,7 +57,16 @@ func (s *UserService) GetAllUserList(ctx context.Context, req *user.Page) (rsp *
 		userList = append(userList, &user.UserInfo{UserId: u.ID, UserName: u.Username})
 	}
 
-	return &user.UserList{List: userList}, nil
+	count, err := s.uc.GetUserCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if count != 0 {
+		count = count/req.Size + 1
+	}
+
+	return &user.UserList{List: userList, MaxPage: count}, nil
 }
 
 func (s *UserService) GetUserGreenHorseList(ctx context.Context, req *user.UserId) (rsp *user.GreenHouseList, err error) {

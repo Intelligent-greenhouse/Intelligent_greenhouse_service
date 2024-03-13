@@ -84,6 +84,7 @@ var bodyDevicePointer = func(d *v1.UpdateDeviceInfoRequest) *model.Device {
 
 var bodyDeviceButtonInfoPointer = func(d *v1.DeviceSwitch) *model.Device {
 	return &model.Device{
+		ID:                  d.DeviceId,
 		Led:                 d.Led,
 		Fan:                 d.Fan,
 		Water:               d.Water,

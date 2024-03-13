@@ -28,8 +28,8 @@ func (d DeviceDao) GetDeviceByDeviceCode(ctx context.Context, deviceCode string)
 }
 
 func (d DeviceDao) SetDeviceButton(ctx context.Context, buttonInfo *model.Device) error {
-	var deviceInfo model.Device
-	err := d.data.Db.Where("id = ?", buttonInfo.ID, &deviceInfo).Error
+	var deviceInfo *model.Device
+	err := d.data.Db.Where("id = ?", buttonInfo.ID).First(&deviceInfo).Error
 	if err != nil {
 		return err
 	}

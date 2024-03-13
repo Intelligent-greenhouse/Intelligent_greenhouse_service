@@ -100,5 +100,5 @@ func (uc UserDomain) CreateNewUser(ctx context.Context, name, psw string, isAdmi
 }
 
 func (uc UserDomain) GetUserCount(ctx context.Context) (int32, error) {
-	return uc.GetUserCount(ctx)
+	return uc.userRepo.GetUserCount(ctx)
 }
