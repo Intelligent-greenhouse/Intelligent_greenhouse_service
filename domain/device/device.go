@@ -164,6 +164,11 @@ func (d DeviceDomain) UpdateDeviceInfo(ctx context.Context, deviceInfo *model.De
 }
 
 func (d DeviceDomain) UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error {
+	_, err := d.repo.GetDeviceByDeviceCode(ctx, deviceCode)
+	if err != nil {
+		return err
+	}
+
 	return d.repo.UpdateDeviceDes(ctx, deviceCode, msg)
 }
 

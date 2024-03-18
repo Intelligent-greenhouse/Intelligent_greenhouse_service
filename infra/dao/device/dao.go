@@ -2,6 +2,7 @@ package device
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"intelligent-greenhouse-service/conf"
@@ -54,6 +55,7 @@ func (d DeviceDao) SetActiveMode(ctx context.Context, mode bool, deviceId int32)
 }
 
 func (d DeviceDao) UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error {
+	fmt.Println("aaa")
 	return d.data.Db.Model(&model.Device{}).Where("device_id = ?", deviceCode).Update("des", msg).Error
 }
 
