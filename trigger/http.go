@@ -15,6 +15,7 @@ func NewHTTPServer(config *conf.Trigger, jwtConfig *conf.JWT, logger log.Logger)
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			jwt.AddHeader(),
 			logging.Server(logger),
 			selector.Server(jwt.LoginAuthMiddleware([]byte(jwtConfig.VerifyKey))).Path(
 				"/api.web.user.User/RegisterDevice",

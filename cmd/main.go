@@ -1,17 +1,18 @@
 package main
 
 import (
+	"github.com/go-kratos/kratos/v2/encoding/json"
+	"google.golang.org/protobuf/encoding/protojson"
 	"os"
 
 	"intelligent-greenhouse-service/conf"
 
 	"github.com/cypunsource/cypunsource-tool/util"
 
+	_ "github.com/cypunsource/kratos-extension/encoding"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
-
-	_ "github.com/cypunsource/kratos-extension/encoding"
 	_ "github.com/joho/godotenv/autoload"
 	_ "go.uber.org/automaxprocs"
 )
@@ -28,6 +29,10 @@ var (
 )
 
 func main() {
+	json.MarshalOptions = protojson.MarshalOptions{
+		EmitUnpopulated: true, //默认值不忽略
+		UseProtoNames:   true, //使用proto name返回http字段
+	}
 	conf.InitConfFile(AppConfigDir)
 
 	logger := log.With(log.NewStdLogger(os.Stdout),
