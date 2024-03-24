@@ -19,6 +19,7 @@ type DeviceRepo interface {
 	UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error
 	SetActiveMode(ctx context.Context, mode bool, deviceId int32) error
 	SetDeviceButton(ctx context.Context, buttonInfo *model.Device) error
+	SetAllDeviceAutoMode(ctx context.Context, deviceIdList []int32, mode bool) error
 }
 
 type DeviceDomain struct {

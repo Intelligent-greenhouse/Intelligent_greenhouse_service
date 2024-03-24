@@ -18,6 +18,11 @@ type DeviceDao struct {
 	conf *conf.Bootstrap
 }
 
+func (d DeviceDao) SetAllDeviceAutoMode(ctx context.Context, deviceIdList []int32, mode bool) error {
+	err := d.data.Db.Model(&model.Device{}).Where("id in ?", deviceIdList).Update("is_activation", mode).Error
+	return err
+}
+
 func (d DeviceDao) GetDeviceByDeviceCode(ctx context.Context, deviceCode string) (*model.Device, error) {
 	var deviceInfo *model.Device
 	err := d.data.Db.Where("device_id = ?", deviceCode).First(&deviceInfo).Error

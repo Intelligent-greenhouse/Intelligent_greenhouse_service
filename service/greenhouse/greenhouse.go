@@ -2,6 +2,7 @@ package greenhouse
 
 import (
 	"context"
+	"google.golang.org/protobuf/types/known/emptypb"
 	greenhouseapi "intelligent-greenhouse-service/api/web/greenhouse"
 	domain_greenhouse "intelligent-greenhouse-service/domain/greenhouse"
 	"intelligent-greenhouse-service/model"
@@ -63,6 +64,14 @@ func (g GreenhouseService) GetDeviceInfo(ctx context.Context, id *greenhouseapi.
 	}
 
 	return deviceInfoPointer(deviceInfo), nil
+}
+
+func (g GreenhouseService) SetGreenHouseAutoMode(ctx context.Context, request *greenhouseapi.SetGreenHouseAutoModeRequest) (*emptypb.Empty, error) {
+	err := g.uc.SetAllDeviceAutoMode(ctx, request.GreenhouseId, request.Mode)
+	if err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
 }
 
 var deviceInfoPointer = func(d *model.Device) *greenhouseapi.DeviceInfo {

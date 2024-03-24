@@ -29,6 +29,7 @@ func NewHTTPServer(config *conf.Trigger, jwtConfig *conf.JWT, logger log.Logger)
 				"/api.web.greenhouse.Greenhouse/CreateGreenhouse",
 				"/api.web.greenhouse.Greenhouse/GetDeviceInfo",
 				"/api.web.greenhouse.Greenhouse/GetGreenhouseAllDeviceInfo",
+				"/api.web.greenhouse.Greenhouse/SetGreenHouseAutoMode",
 
 				"/api.web.device.Device/SetDeviceAutoMode",
 				"/api.web.device.Device/SetDeviceButtonSwitch",

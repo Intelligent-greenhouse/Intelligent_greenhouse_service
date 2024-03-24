@@ -61,3 +61,13 @@ func (g GreenhouseDomain) GetDeviceListByGreenhouseId(ctx context.Context, green
 
 	return g.deviceRepo.GetDeviceList(ctx, idList)
 }
+
+func (g GreenhouseDomain) SetAllDeviceAutoMode(ctx context.Context, greenhouseId int32, mode bool) error {
+
+	idList, err := g.greenhouseRepo.GetDeviceIdListByGreenhouseId(ctx, greenhouseId)
+	if err != nil {
+		return err
+	}
+
+	return g.deviceRepo.SetAllDeviceAutoMode(ctx, idList, mode)
+}
