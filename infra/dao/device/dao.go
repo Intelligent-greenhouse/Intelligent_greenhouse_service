@@ -2,7 +2,6 @@ package device
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"intelligent-greenhouse-service/conf"
@@ -51,8 +50,7 @@ func (d DeviceDao) SetDeviceButton(ctx context.Context, buttonInfo *model.Device
 	deviceInfo.IncreaseTemperature = buttonInfo.IncreaseTemperature
 	deviceInfo.ReduceTemperature = buttonInfo.ReduceTemperature
 	deviceInfo.Buzzer = buttonInfo.Buzzer
-
-	return d.data.Db.Updates(&deviceInfo).Error
+	return d.data.Db.Save(&deviceInfo).Error
 }
 
 func (d DeviceDao) SetActiveMode(ctx context.Context, mode bool, deviceId int32) error {
@@ -60,7 +58,6 @@ func (d DeviceDao) SetActiveMode(ctx context.Context, mode bool, deviceId int32)
 }
 
 func (d DeviceDao) UpdateDeviceDes(ctx context.Context, deviceCode, msg string) error {
-	fmt.Println("aaa")
 	return d.data.Db.Model(&model.Device{}).Where("device_id = ?", deviceCode).Update("des", msg).Error
 }
 
